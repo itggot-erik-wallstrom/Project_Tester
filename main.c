@@ -427,23 +427,27 @@ void activate(GtkApplication* app, gpointer user_data)
 	}
 	g_dir_close(dir);
 
+	GtkWidget* visible;
 	if(g_list_length(gtk_container_get_children(GTK_CONTAINER(program->list))))
 	{
+		gtk_widget_show(GTK_WIDGET(program->list));
 		gtk_stack_add_named(
 			program->content, 
 			GTK_WIDGET(program->list),
 			"list"
 		);
+		visible = GTK_WIDGET(program->list);
 	}
 	else
 	{
+		visible = gtk_label_new("No projects were found");
 		gtk_stack_add_named(
 			program->content,
-			gtk_label_new("No projects were found"),
+			visible,
 			"list"
 		);
 	}
-	gtk_stack_set_visible_child_name(program->content, "list");
+	gtk_stack_set_visible_child(program->content, visible);
 	gtk_container_add(
 		GTK_CONTAINER(program->window), 
 		GTK_WIDGET(program->content)
