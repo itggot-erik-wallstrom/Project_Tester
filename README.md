@@ -1,6 +1,7 @@
 # Project_Tester
 
 **Setup guide:**
+
 Ubuntu:
 
 	git clone https://github.com/itggot-erik-wallstrom/Project_Tester.git
@@ -15,7 +16,7 @@ Arch:
 	git clone https://github.com/itggot-erik-wallstrom/Project_Tester.git
 	cd Project_Tester
 	sudo chmod 777 install.sh
-	./install.sh
+	sudo pacman -S ruby
 	cp project_tester ~/Documents/Programmering/.
 	cp test.rb ~/Documents/Programmering/.
 
