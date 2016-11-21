@@ -13,7 +13,7 @@
 
 GUI:
 
-	cd Documents/Programmering
+	cd ~/Documents/Programmering
 	./project_tester
 
 CLI:
