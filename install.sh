@@ -1,9 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash
 
-sudo apt install ruby gem
+sudo apt install ruby gem libgtk-3-dev libvte-2.91-dev
 gem install colorize
-
-sudo apt install libgtk-3-dev
-sudo apt install libvte-2.91-dev
 
 make
