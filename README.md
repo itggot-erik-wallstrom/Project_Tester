@@ -1,6 +1,6 @@
 # Project_Tester
 
-*Setup guide*
+**Setup guide:**
 
 	git clone https://github.com/itggot-erik-wallstrom/Project_Tester.git
 	cd Project_Tester
@@ -9,11 +9,11 @@
 	cp project_tester ~/Documents/Programmering/.
 	cp test.rb ~/Documents/Programmering/.
 
-*Usage*
+**Usage:**
 
-	GUI:
+GUI:
 		cd Documents/Programmering
 		./project_tester
-	CLI:
+CLI:
 		cd ~/Documents/Programmering
 		./test.rb
