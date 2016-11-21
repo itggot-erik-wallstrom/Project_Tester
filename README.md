@@ -12,8 +12,12 @@
 **Usage:**
 
 GUI:
-		cd Documents/Programmering
-		./project_tester
+
+	cd Documents/Programmering
+	./project_tester
+
 CLI:
-		cd ~/Documents/Programmering
-		./test.rb
+
+	cd ~/Documents/Programmering
+	./test.rb
+
