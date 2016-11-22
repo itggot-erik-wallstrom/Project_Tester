@@ -57,12 +57,20 @@ void on_edit(GtkButton* button, gpointer user_data)
 	GString* file_name = g_string_new(
 		gtk_stack_get_visible_child_name(program->content)
 	);
+	if(!strcmp(file_name->str, "counter"))
+	{
+		g_string_append(file_name, "/lib/");
+		g_string_append(file_name, "count");
+	}
+	else
+	{
+		g_string_append(file_name, "/lib/");
+		g_string_append(
+			file_name, 
+			gtk_stack_get_visible_child_name(program->content)
+		);
+	}
 
-	g_string_append(file_name, "/lib/");
-	g_string_append(
-		file_name, 
-		gtk_stack_get_visible_child_name(program->content)
-	);
 	g_string_append(file_name, ".rb");
 	GFile* file = g_file_new_for_path(file_name->str);
 
