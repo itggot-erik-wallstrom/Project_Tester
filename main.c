@@ -20,138 +20,6 @@ struct Popup
 	GFile* file;
 };
 
-void on_application(
-	GtkAppChooserWidget* widget, 
-	GAppInfo* info, 
-	gpointer user_data
-)
-{
-	struct Popup* popup = user_data;
-	GList* list = NULL;
-	list = g_list_append(list, popup->file);
-	g_app_info_launch(info, list, NULL, NULL);
-	gtk_window_close(GTK_WINDOW(popup->dialog));
-}
-
-void on_response(
-	GtkDialog* dialog, 
-	gint response_id, 
-	gpointer user_data
-)
-{
-	struct Popup* popup = user_data;
-	GtkAppChooser* chooser = GTK_APP_CHOOSER(dialog);
-	if(response_id == GTK_RESPONSE_OK)
-	{
-		on_application(NULL, gtk_app_chooser_get_app_info(chooser), popup);
-	}
-	else
-	{
-		gtk_window_close(GTK_WINDOW(popup->dialog));
-	}
-}
-
-void on_edit(GtkButton* button, gpointer user_data)
-{
-	struct Project_Tester* program = user_data;
-	GString* file_name = g_string_new(
-		gtk_stack_get_visible_child_name(program->content)
-	);
-	if(!strcmp(file_name->str, "counter"))
-	{
-		g_string_append(file_name, "/lib/");
-		g_string_append(file_name, "count");
-	}
-	else
-	{
-		g_string_append(file_name, "/lib/");
-		g_string_append(
-			file_name, 
-			gtk_stack_get_visible_child_name(program->content)
-		);
-	}
-
-	g_string_append(file_name, ".rb");
-	GFile* file = g_file_new_for_path(file_name->str);
-
-	GtkWidget* dialog = gtk_app_chooser_dialog_new(
-		program->window, 
-		GTK_DIALOG_USE_HEADER_BAR,
-		file
-	);
-	struct Popup* popup = g_malloc(sizeof(struct Popup));
-	popup->file = file;
-	popup->dialog = GTK_APP_CHOOSER_DIALOG(dialog);
-
-	g_signal_connect(
-		dialog,
-		"response",
-		G_CALLBACK(on_response),
-		popup
-	);
-	gtk_widget_show(dialog);
-}
-
-void on_list_click(
-	GtkListBox* box, 
-	GtkListBoxRow* row, 
-	gpointer user_data
-)
-{
-	struct Project_Tester* program = user_data;
-	gtk_stack_set_visible_child_name(
-		program->content,
-		gtk_label_get_text(GTK_LABEL(gtk_bin_get_child(GTK_BIN(row))))
-	);
-	
-	gtk_widget_show_all(GTK_WIDGET(program->window));
-	gtk_widget_hide(program->list_refresh_button);
-}
-
-void on_back(GtkButton* button, gpointer user_data)
-{
-	struct Project_Tester* program = user_data;
-	gtk_stack_set_transition_type(
-		program->content,
-		GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT
-	);
-	gtk_stack_set_visible_child_name(program->content, "list");
-	gtk_stack_set_transition_type(
-		program->content,
-		GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT
-	);
-
-	gtk_widget_show_all(GTK_WIDGET(program->window));
-	gtk_widget_hide(program->project_refresh_button);
-	gtk_widget_hide(program->back_button);
-	gtk_widget_hide(program->edit_button);
-}
-
-void on_list_refresh(GtkButton* button, gpointer user_data)
-{
-	struct Project_Tester* program = user_data;
-	GList* list_items = gtk_container_get_children(
-		GTK_CONTAINER(program->list)
-	);
-
-	for(GList* l = list_items; l != NULL; l = l->next)
-	{
-		gtk_container_remove(GTK_CONTAINER(program->list), l->data);
-	}
-	
-	GDir* dir = g_dir_open(".", 0, NULL);
-	for(const char* name = NULL; (name = g_dir_read_name(dir));)
-	{
-		if(g_file_test(name, G_FILE_TEST_IS_DIR))
-		{
-			GtkWidget* label = gtk_label_new(name);
-			gtk_container_add(GTK_CONTAINER(program->list), label);
-		}
-	}
-	g_dir_close(dir);
-	gtk_widget_show_all(GTK_WIDGET(program->list));
-}
-	
 GtkWidget* create_project(const char* project)
 {
 	GtkWidget* paned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
@@ -265,6 +133,164 @@ GtkWidget* create_project(const char* project)
 
 	return paned;
 }
+
+void on_application(
+	GtkAppChooserWidget* widget, 
+	GAppInfo* info, 
+	gpointer user_data
+)
+{
+	struct Popup* popup = user_data;
+	GList* list = NULL;
+	list = g_list_append(list, popup->file);
+	g_app_info_launch(info, list, NULL, NULL);
+	gtk_window_close(GTK_WINDOW(popup->dialog));
+}
+
+void on_response(
+	GtkDialog* dialog, 
+	gint response_id, 
+	gpointer user_data
+)
+{
+	struct Popup* popup = user_data;
+	GtkAppChooser* chooser = GTK_APP_CHOOSER(dialog);
+	if(response_id == GTK_RESPONSE_OK)
+	{
+		on_application(NULL, gtk_app_chooser_get_app_info(chooser), popup);
+	}
+	else
+	{
+		gtk_window_close(GTK_WINDOW(popup->dialog));
+	}
+}
+
+void on_edit(GtkButton* button, gpointer user_data)
+{
+	struct Project_Tester* program = user_data;
+	GString* file_name = g_string_new(
+		gtk_stack_get_visible_child_name(program->content)
+	);
+	if(!strcmp(file_name->str, "counter"))
+	{
+		g_string_append(file_name, "/lib/");
+		g_string_append(file_name, "count");
+	}
+	else
+	{
+		g_string_append(file_name, "/lib/");
+		g_string_append(
+			file_name, 
+			gtk_stack_get_visible_child_name(program->content)
+		);
+	}
+
+	g_string_append(file_name, ".rb");
+	GFile* file = g_file_new_for_path(file_name->str);
+
+	GtkWidget* dialog = gtk_app_chooser_dialog_new(
+		program->window, 
+		GTK_DIALOG_USE_HEADER_BAR,
+		file
+	);
+	struct Popup* popup = g_malloc(sizeof(struct Popup));
+	popup->file = file;
+	popup->dialog = GTK_APP_CHOOSER_DIALOG(dialog);
+
+	g_signal_connect(
+		dialog,
+		"response",
+		G_CALLBACK(on_response),
+		popup
+	);
+	gtk_widget_show(dialog);
+}
+
+void on_list_click(
+	GtkListBox* box, 
+	GtkListBoxRow* row, 
+	gpointer user_data
+)
+{
+	struct Project_Tester* program = user_data;
+	if(!gtk_stack_get_child_by_name(
+			program->content,
+			gtk_label_get_text(
+				GTK_LABEL(gtk_bin_get_child(GTK_BIN(row)))
+			)
+		)
+	)
+	{
+		GtkWidget* widget = create_project(
+			gtk_label_get_text(
+				GTK_LABEL(gtk_bin_get_child(GTK_BIN(row)))
+			)
+		);
+		gtk_widget_show_all(widget);
+		gtk_stack_add_named(
+			program->content,
+			widget,
+			gtk_label_get_text(
+				GTK_LABEL(gtk_bin_get_child(GTK_BIN(row)))
+			)
+		);
+	}
+
+	gtk_stack_set_visible_child_name(
+		program->content,
+		gtk_label_get_text(
+			GTK_LABEL(gtk_bin_get_child(GTK_BIN(row)))
+		)
+	);
+	
+	gtk_widget_show_all(GTK_WIDGET(program->window));
+	gtk_widget_hide(program->list_refresh_button);
+}
+
+void on_back(GtkButton* button, gpointer user_data)
+{
+	struct Project_Tester* program = user_data;
+	gtk_stack_set_transition_type(
+		program->content,
+		GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT
+	);
+	gtk_stack_set_visible_child_name(program->content, "list");
+	gtk_stack_set_transition_type(
+		program->content,
+		GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT
+	);
+
+	gtk_widget_show_all(GTK_WIDGET(program->window));
+	gtk_widget_hide(program->project_refresh_button);
+	gtk_widget_hide(program->back_button);
+	gtk_widget_hide(program->edit_button);
+}
+
+void on_list_refresh(GtkButton* button, gpointer user_data)
+{
+	struct Project_Tester* program = user_data;
+	GList* list_items = gtk_container_get_children(
+		GTK_CONTAINER(program->list)
+	);
+
+	for(GList* l = list_items; l != NULL; l = l->next)
+	{
+		gtk_container_remove(GTK_CONTAINER(program->list), l->data);
+	}
+	
+	GDir* dir = g_dir_open(".", 0, NULL);
+	for(const char* name = NULL; (name = g_dir_read_name(dir));)
+	{
+		if(g_file_test(name, G_FILE_TEST_IS_DIR))
+		{
+			GtkWidget* label = gtk_label_new(name);
+			gtk_container_add(GTK_CONTAINER(program->list), label);
+		}
+	}
+	g_dir_close(dir);
+	gtk_widget_show_all(GTK_WIDGET(program->list));
+}
+	
 
 void on_project_refresh(GtkButton* button, gpointer user_data)
 {
@@ -422,13 +448,6 @@ void activate(GtkApplication* app, gpointer user_data)
 			{
 				GtkWidget* label = gtk_label_new(name);
 				gtk_container_add(GTK_CONTAINER(program->list), label);
-				
-				GtkWidget* paned = create_project(name);
-				gtk_stack_add_named(
-					program->content,
-					paned, 
-					name
-				);
 			}
 			g_string_free(string, TRUE);
 		}

@@ -4,33 +4,19 @@
 
 Ubuntu:
 
-	git clone https://github.com/itggot-erik-wallstrom/Project_Tester.git
-	cd Project_Tester
-	sudo chmod 777 install.sh
-	./install.sh
-	cp project_tester ~/Documents/Programmering/.
-	sudo chmod 777 test.rb
-	cp test.rb ~/Documents/Programmering/.
-	cp Project_Tester.desktop ~/Documents/Programmering/.
-
-Arch:
-	
-	git clone https://github.com/itggot-erik-wallstrom/Project_Tester.git
-	cd Project_Tester
-	sudo chmod 777 install.sh
-	sudo pacman -S ruby
-	cp project_tester ~/Documents/Programmering/.
-	cp test.rb ~/Documents/Programmering/.
+	git clone https://github.com/itggot-erik-wallstrom/Project_Tester.git && cd Project_Tester
+	sudo chmod 777 install.sh test.rb && ./install.sh
+	cp project_tester test.rb <insert your programming folder here>
 
 **Usage:**
 
 GUI:
 
-	cd ~/Documents/Programmering
+	cd <insert your programming folder here>
 	./project_tester
 
 CLI:
 
-	cd ~/Documents/Programmering
+	cd <insert your programming folder here>
 	./test.rb
 
