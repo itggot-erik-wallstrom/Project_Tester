@@ -9,6 +9,7 @@ Ubuntu:
 	sudo chmod 777 install.sh
 	./install.sh
 	cp project_tester ~/Documents/Programmering/.
+	sudo chmod 777 test.rb
 	cp test.rb ~/Documents/Programmering/.
 
 Arch:
