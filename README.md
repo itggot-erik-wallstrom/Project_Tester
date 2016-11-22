@@ -11,6 +11,7 @@ Ubuntu:
 	cp project_tester ~/Documents/Programmering/.
 	sudo chmod 777 test.rb
 	cp test.rb ~/Documents/Programmering/.
+	cp Project_Tester.desktop ~/Documents/Programmering/.
 
 Arch:
 	

@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Project_Tester
+StartupNotify=false
+Exec=/home/erikwallstrom/Documents/Programming/Exercises/project_tester
